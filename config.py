@@ -34,7 +34,7 @@ class TranslationConfig:
     """Translation job configuration."""
 
     source_language: str = "auto"
-    target_language: str = "English"
+    target_language: str = "French"  # changed to French since that's what I mostly use
     chunk_size: int = 1500  # characters per chunk sent to LLM
     overlap: int = 0        # overlap between chunks (chars)
     preserve_formatting: bool = True
@@ -99,27 +99,4 @@ def _get_llm_config() -> LLMConfig:
 def _get_translation_config() -> TranslationConfig:
     """Build TranslationConfig from environment variables."""
     return TranslationConfig(
-        source_language=os.getenv("SOURCE_LANGUAGE", "auto"),
-        target_language=os.getenv("TARGET_LANGUAGE", "English"),
-        chunk_size=int(os.getenv("CHUNK_SIZE", "1500")),
-        overlap=int(os.getenv("CHUNK_OVERLAP", "0")),
-        preserve_formatting=os.getenv("PRESERVE_FORMATTING", "true").lower() == "true",
-        glossary_path=os.getenv("GLOSSARY_PATH"),
-        system_prompt_override=os.getenv("SYSTEM_PROMPT_OVERRIDE"),
-    )
-
-
-def load_config() -> AppConfig:
-    """Load and return the full application configuration."""
-    return AppConfig(
-        llm=_get_llm_config(),
-        translation=_get_translation_config(),
-        output_dir=Path(os.getenv("OUTPUT_DIR", "output")),
-        log_level=os.getenv("LOG_LEVEL", "INFO").upper(),
-        cache_enabled=os.getenv("CACHE_ENABLED", "true").lower() == "true",
-        cache_dir=Path(os.getenv("CACHE_DIR", ".cache")),
-    )
-
-
-# Module-level singleton — import this in other modules
-config: AppConfig = load_config()
+        source_la
