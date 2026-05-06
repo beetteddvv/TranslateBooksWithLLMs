@@ -1,27 +1,34 @@
-flask
-flask-cors
-flask-socketio
-python-socketio
-requests
-tqdm
-httpx
-lxml
-python-dotenv
-aiofiles>=22.0,<25.0
-tiktoken>=0.5.0
-edge-tts>=6.1.9
-pyyaml>=6.0
-jinja2>=3.0
-langdetect>=1.0.9
-Pillow>=10.0.0
+# Core dependencies
+openai>=1.0.0
+anthanthropic>=0.20.0
+google-generativeai>=0.4.0
 
-# DOCX support
-mammoth>=1.0.0
+# HTTP and async
+httpx>=0.25.0
+aiohttp>=3.9.0
+requests>=2.31.0
+
+# Document parsing
+EbookLib>=0.18
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+pypdf>=3.17.0
 python-docx>=1.1.0
 
-# Chatterbox TTS (GPU-accelerated local TTS) - OPTIONAL
-# These dependencies have strict numpy version requirements that may conflict.
-# Install separately if needed:
-#   pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121
-#   pip install chatterbox-tts
-# Requires CUDA-capable GPU for optimal performance (CPU fallback available but slow)
+# Environment and config
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# CLI
+typer>=0.9.0
+rich>=13.7.0
+
+# Progress and utilities
+tqdm>=4.66.0
+tenacity>=8.2.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.23.0
+pytest-cov>=4.1.0
