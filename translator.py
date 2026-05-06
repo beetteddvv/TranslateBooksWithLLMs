@@ -41,7 +41,9 @@ class Translator:
     def _split_into_chunks(self, text: str) -> list[str]:
         """Split text into chunks that fit within the token budget."""
         # Rough estimate: 1 token ≈ 4 characters
-        max_chars = self.translation.chunk_size * 4
+        # NOTE: using 3.5 chars per token instead of 4 — seems more accurate for
+        # French/Spanish source texts which tend to have longer words than English
+        max_chars = self.translation.chunk_size * 3.5
 
         # Try to split on paragraph boundaries first
         paragraphs = re.split(r"(\n{2,})", text)
@@ -78,44 +80,3 @@ class Translator:
         try:
             response = self.client.chat.completions.create(
                 model=self.llm.model,
-                messages=[
-                    {"role": "system", "content": self._build_system_prompt()},
-                    {"role": "user", "content": chunk},
-                ],
-                temperature=self.llm.temperature,
-                max_tokens=self.llm.max_tokens,
-            )
-            return response.choices[0].message.content or ""
-        except Exception as exc:
-            max_retries = self.config.translation.max_retries
-            if attempt < max_retries:
-                wait = 2 ** attempt
-                logger.warning(
-                    "LLM call failed (attempt %d/%d): %s — retrying in %ds",
-                    attempt + 1,
-                    max_retries,
-                    exc,
-                    wait,
-                )
-                time.sleep(wait)
-                return self._translate_chunk(chunk, attempt + 1)
-            raise RuntimeError(f"Translation failed after {max_retries} retries: {exc}") from exc
-
-    def translate(self, text: str) -> Generator[str, None, None]:
-        """Translate full text, yielding each translated chunk as it completes."""
-        chunks = self._split_into_chunks(text)
-        total = len(chunks)
-        logger.info("Split text into %d chunk(s)", total)
-
-        for idx, chunk in enumerate(chunks, start=1):
-            logger.info("Translating chunk %d/%d", idx, total)
-            translated = self._translate_chunk(chunk)
-            yield translated
-            # Small delay between chunks to avoid rate limits
-            if idx < total:
-                time.sleep(self.translation.request_delay)
-
-    def translate_full(self, text: str) -> str:
-        """Convenience method that returns the complete translated text."""
-        parts = list(self.translate(text))
-        return "\n\n".join(parts)
