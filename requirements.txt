@@ -32,3 +32,6 @@ tenacity>=8.2.0
 pytest>=7.4.0
 pytest-asyncio>=0.23.0
 pytest-cov>=4.1.0
+
+# Personal additions
+loguru>=0.7.0  # much nicer logging than the standard library
