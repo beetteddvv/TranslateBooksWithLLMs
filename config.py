@@ -35,8 +35,8 @@ class TranslationConfig:
 
     source_language: str = "auto"
     target_language: str = "French"  # changed to French since that's what I mostly use
-    chunk_size: int = 1500  # characters per chunk sent to LLM
-    overlap: int = 0        # overlap between chunks (chars)
+    chunk_size: int = 2000  # bumped from 1500 - fewer API calls and context flows better
+    overlap: int = 50       # small overlap to avoid cutting sentences mid-thought
     preserve_formatting: bool = True
     glossary_path: Optional[str] = None
     system_prompt_override: Optional[str] = None
@@ -97,6 +97,4 @@ def _get_llm_config() -> LLMConfig:
 
 
 def _get_translation_config() -> TranslationConfig:
-    """Build TranslationConfig from environment variables."""
-    return TranslationConfig(
-        source_la
+    """Build TranslationConfig from environment variables.
