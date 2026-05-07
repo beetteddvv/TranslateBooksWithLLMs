@@ -58,7 +58,8 @@ class Translator:
                     chunks.append(current_chunk.strip())
                 # If a single paragraph exceeds max_chars, split by sentences
                 if len(segment) > max_chars:
-                    sentences = re.split(r"(?<=[.!?])\s+", segment)
+                    # also split on Chinese/Japanese sentence-ending punctuation
+                    sentences = re.split(r"(?<=[.!?\u3002\uff01\uff1f])\s*", segment)
                     current_chunk = ""
                     for sentence in sentences:
                         if len(current_chunk) + len(sentence) <= max_chars:
@@ -76,7 +77,4 @@ class Translator:
         return chunks
 
     def _translate_chunk(self, chunk: str, attempt: int = 0) -> str:
-        """Send a single chunk to the LLM and return the translation."""
-        try:
-            response = self.client.chat.completions.create(
-                model=self.llm.model,
+        """Send a s
