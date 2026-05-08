@@ -35,3 +35,4 @@ pytest-cov>=4.1.0
 
 # Personal additions
 loguru>=0.7.0  # much nicer logging than the standard library
+chardet>=5.2.0  # useful for detecting encoding of source files before parsing
